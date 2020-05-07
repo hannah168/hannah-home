@@ -14,6 +14,9 @@ Vue.prototype.getCookie = function (name) {
   let cookies = document.cookie.split(';')
   for (let i = 0; i < cookies.length; i++) {
     let tmpC = cookies[i]
+    if (tmpC === '') {
+      return ''
+    }
     while (tmpC.charAt(0) === '') {
       tmpC = tmpC.substring(1)
     }

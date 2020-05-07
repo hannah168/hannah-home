@@ -107,6 +107,10 @@ export default {
   computed () {
     console.log('computed')
   },
+  // 监听事件
+  watch () {
+    console.log('watch')
+  },
   // 实例销毁之前调用，主要用来销毁一些类似监听事件
   beforeDestroy () {
     console.log('beforeDestroy')

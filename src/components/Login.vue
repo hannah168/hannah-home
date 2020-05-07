@@ -34,28 +34,15 @@ export default {
   methods: {
     onSubMit () {
       axios.post('/api/login', this.formMess, {'headers': {'X-CSRFToken': this.getCookie('csrf_token'), 'withCredentials': true}}).then(res => {
-        this.$router.push('/productlist')
+        this.$router.push('/product')
       }).catch(error => {
         alert(error)
+        this.$router.push('/login')
       })
     },
     onCancel () {
       this.$router.push('/')
     }
-    // getCookie (name) {
-    //   let cname = name + '='
-    //   let cookies = document.cookie.split(';')
-    //   for (let i = 0; i < cookies.length; i++) {
-    //     let tmpC = cookies[i]
-    //     while (tmpC.charAt(0) === '') {
-    //       tmpC = tmpC.substring(1)
-    //     }
-    //     if (tmpC.indexOf(cname) !== -1) {
-    //       return tmpC.substring(cname.length, tmpC.length)
-    //     }
-    //   }
-    //   return ''
-    // }
   },
   created () {
   }

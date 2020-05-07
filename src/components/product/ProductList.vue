@@ -60,41 +60,5 @@ h1{
   margin: 0 auto 80px;
   text-align: left;
 }
-.goods_type_list{
-  margin: 10px auto 0;
-}
-
-.goods_type_list li{
-  width:196px;
-  float:left;
-  margin-bottom:10px;
-  list-style: none
-}
-
-.goods_type_list li img{width:160px;height:160px;display:block;margin:10px auto;}
-.goods_type_list li h4{width:160px;margin:0 auto;}
-.goods_type_list li h4 a{font-weight:normal;color:#666;display:block;width:160px;overflow:hidden;white-space:nowrap;text-overflow:ellipsis;}
-
-.operate{
-  width:160px;
-  margin:10px auto;
-  position:relative
-}
-.goods_type_list .operate .prize{color:#da260e; font-size:14px;}
-.goods_type_list .operate .unit{color:#999;padding-left:5px;}
-/* .goods_type_list .operate{
-  display:inline-block;
-  width:15px;
-  height:15px;
-  background:url(../static/image/1.jpeg);
-  position:absolute;
-  right:0;
-  top:3px
-} */
-
-/* 清除浮动 */
-.clearfix:before,.clearfix:after{content:"";display:table}
-.clearfix:after{clear:both;}
-.clearfix{zoom:1}
 
 </style>
