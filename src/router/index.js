@@ -7,6 +7,7 @@ import ProductList from '@/components/product/ProductList'
 import Product from '@/components/product/Product'
 import AboutUs from '@/components/AboutUs'
 import test from '@/components/product/xuanfu'
+import PreviewFile from '@/components/file/PreviewFile'
 
 Vue.use(Router)
 
@@ -46,6 +47,11 @@ export default new Router({
       path: '/test',
       name: '音乐播放器',
       component: test
+    },
+    {
+      path: '/filepreview',
+      name: '文件预览',
+      component: PreviewFile
     }
   ]
 })
