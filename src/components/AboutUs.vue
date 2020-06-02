@@ -5,7 +5,7 @@
 </template>
 
 <script>
-import axios from 'axios'
+// import axios from 'axios'
 export default {
   name: 'AboutUs',
   data () {
@@ -15,7 +15,8 @@ export default {
   },
   methods: {
     getAboutUs () {
-      axios.get('/api/aboutus').then(res => {
+      // axios.get('/api/aboutus').then(res => {
+      this.$get({'url': '/api/aboutus'}).then(res => {
         this.msg = res.data
         console.log(res.data)
       })

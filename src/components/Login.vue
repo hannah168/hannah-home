@@ -19,7 +19,7 @@
 </template>
 
 <script>
-import axios from 'axios'
+// import axios from 'axios'
 
 export default {
   name: 'Login',
@@ -33,7 +33,8 @@ export default {
   },
   methods: {
     onSubMit () {
-      axios.post('/api/login', this.formMess, {'headers': {'X-CSRFToken': this.getCookie('csrf_token'), 'withCredentials': true}}).then(res => {
+      // axios.post('/api/login', this.formMess, {'headers': {'X-CSRFToken': this.getCookie('csrf_token'), 'withCredentials': true}}).then(res => {
+      this.$post({'url': '/api/login', 'data': this.formMess}).then(res => {
         this.$router.push('/product')
       }).catch(error => {
         alert(error)

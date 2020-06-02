@@ -5,27 +5,11 @@ import App from './App'
 import router from './router'
 import ElementUI from 'element-ui'
 import 'element-ui/lib/theme-chalk/index.css'
+import ajax from './assets/ajax'
 
 Vue.config.productionTip = false
 Vue.use(ElementUI)
-
-Vue.prototype.getCookie = function (name) {
-  let cname = name + '='
-  let cookies = document.cookie.split(';')
-  for (let i = 0; i < cookies.length; i++) {
-    let tmpC = cookies[i]
-    if (tmpC === '') {
-      return ''
-    }
-    while (tmpC.charAt(0) === '') {
-      tmpC = tmpC.substring(1)
-    }
-    if (tmpC.indexOf(cname) !== -1) {
-      return tmpC.substring(cname.length, tmpC.length)
-    }
-  }
-  return ''
-}
+Vue.use(ajax)
 
 /* eslint-disable no-new */
 new Vue({

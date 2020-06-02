@@ -23,7 +23,7 @@
 </template>
 
 <script>
-import axios from 'axios'
+// import axios from 'axios'
 export default {
   name: 'ProductList',
   data () {
@@ -35,8 +35,9 @@ export default {
   },
   methods: {
     getproduct () {
-      axios.post('/api/productlist', {}, {'headers': {'X-CSRFToken': this.getCookie('csrf_token'), 'withCredentials': true}}).then(res => {
-        this.skus = res.data
+      // axios.post('/api/productlist', {}, {'headers': {'X-CSRFToken': this.getCookie('csrf_token'), 'withCredentials': true}}).then(res => {
+      this.$post({'url': '/api/productlist'}).then(res => {
+        this.skus = res
       }).catch(error => {
         // alert(error)
         this.error_msg = error
