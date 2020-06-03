@@ -50,9 +50,9 @@ export default {
         this.writeCurrentDate()
         this.mes = res.weatherinfo
         let weather = this.mes.weather
-        if (weather === '多云') {
+        if (weather === '多云' | weather.indexOf('阴') !== -1) {
           this.weathericon = 'el-icon-cloudy'
-        } else if (weather === '雨') {
+        } else if (weather.indexOf('雨') !== -1) {
           this.weathericon = 'el-icon-light-rain'
         } else {
           this.weathericon = 'el-icon-sunny'
