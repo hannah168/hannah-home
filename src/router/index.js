@@ -1,6 +1,6 @@
 import Vue from 'vue'
 import Router from 'vue-router'
-// import HelloWorld from '@/components/HelloWorld'
+import HelloWorld from '@/components/HelloWorld'
 import Login from '@/components/Login'
 import Index from '@/components/Index'
 import ProductList from '@/components/product/ProductList'
@@ -18,11 +18,11 @@ export default new Router({
       name: 'Index',
       component: Index
     },
-    // {
-    //   path: '/hello',
-    //   name: 'Hello',
-    //   component: HelloWorld
-    // },
+    {
+      path: '/hello',
+      name: 'Hello',
+      component: HelloWorld
+    },
     {
       path: '/login',
       name: '登陆',

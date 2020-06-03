@@ -18,7 +18,6 @@ export default {
       // axios.get('/api/aboutus').then(res => {
       this.$get({'url': '/api/aboutus'}).then(res => {
         this.msg = res.data
-        console.log(res.data)
       })
     }
   },
