@@ -36,7 +36,7 @@ export default {
   methods: {
     getproduct () {
       // axios.post('/api/productlist', {}, {'headers': {'X-CSRFToken': this.getCookie('csrf_token'), 'withCredentials': true}}).then(res => {
-      this.$post({'url': '/api/productlist'}).then(res => {
+      this.$api.productList().then(res => {
         this.skus = res
       }).catch(error => {
         // alert(error)

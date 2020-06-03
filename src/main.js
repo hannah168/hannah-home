@@ -5,11 +5,13 @@ import App from './App'
 import router from './router'
 import ElementUI from 'element-ui'
 import 'element-ui/lib/theme-chalk/index.css'
-import ajax from './assets/ajax'
+// import ajax from './assets/ajax'
+import * as api from './api'
 
+Vue.prototype.$api = api
 Vue.config.productionTip = false
 Vue.use(ElementUI)
-Vue.use(ajax)
+// Vue.use(api)
 
 /* eslint-disable no-new */
 new Vue({

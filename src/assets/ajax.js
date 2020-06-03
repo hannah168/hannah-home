@@ -1,125 +1,194 @@
-export default
-{
-  install (Vue) {
-    Vue.prototype.$http = function (options) {
-      /*  将数据转化为字符串  */
-      var strData = function (data) {
-        let dataStr = ''
-        for (var key in data) {
-          dataStr += key + '=' + data[key] + '&'
-        }
-        dataStr = dataStr && dataStr.slice(0, -1)
-        return dataStr
-      }
-      /*  创建 XMLHttpRequest 对象  */
-      var createXHR = function () {
-        var xhr
-        if (window.XMLHttpRequest) { // code for IE7+, Firefox, Chrome, Opera, Safari
-          xhr = new XMLHttpRequest()
-        }
-        // else if (window.ActiveXObject) { // code for IE6, IE5
-        //   xhr = new ActiveXObject('Microsoft.XMLHTTP')
-        // }
-        return xhr
-      }
-      /* 向服务器发送请求 */
-      var open = function (xhr, type, url, async) {
-        xhr.open(type, url, async)
-      }
-      var send = function (xhr, msg) {
-        xhr.send(msg)
-      }
-      var getCookie = function (name) {
-        let cname = name + '='
-        let cookies = document.cookie.split(';')
-        for (let i = 0; i < cookies.length; i++) {
-          let tmpC = cookies[i]
-          if (tmpC === '') {
-            return ''
-          }
-          while (tmpC.charAt(0) === '') {
-            tmpC = tmpC.substring(1)
-          }
-          if (tmpC.indexOf(cname) !== -1) {
-            return tmpC.substring(cname.length, tmpC.length)
-          }
-        }
-        return ''
-      }
-      var setHeaders = function (xhr, headers) {
-        xhr.setRequestHeader('Content-Type', 'application/json')
-        xhr.setRequestHeader('withCredentials', true)
-        xhr.setRequestHeader('X-CSRFToken', getCookie('csrf_token'))
-        if (!headers) {
-          return false
-        }
-        for (var key in headers) {
-          xhr.setRequestHeader(key, headers[key])
-        }
-      }
-      var request = function (xhr, opts) {
-        if (opts.type === 'GET') {
-          open(xhr, opts.type, opts.url + '?' + strData(opts.data), opts.async)
-          send(xhr, null)
-        } else if (opts.type === 'POST') {
-          open(xhr, opts.type, opts.url, opts.async)
-          if (opts.headers) {
-            setHeaders(xhr, opts.headers)
-          }
-          send(xhr, strData(opts.data))
-        }
-      }
-      return new Promise((resolve, reject) => {
-        if (!options || typeof options !== 'object') {
-          reject(new Error('参数错误，请传入对象参数！'))
-          return false
-        }
-        if (!options.url) {
-          reject(new Error('url不能为空'))
-          return false
-        }
-        options.type = options.type ? options.type.toUpperCase() : 'GET'
-        // options.async = (options.async && options.async === false) ? false : true
-        options.dataType = options.dataType || 'json'
-        options.data = options.data || {}
-        options.headers = options.headers || {}
-        strData(options.data)
-        /* 创建 XMLHttpRequest 对象 */
-        var xhr = createXHR()
-        /* 创建服务器返回响应后执行操作函数 */
-        xhr.onreadystatechange = function () {
-          var responseData
-          if (xhr.readyState === 4) {
-            switch (xhr.status) {
-              case 200:
-                switch (options.dataType) {
-                  case 'xml':
-                    responseData = xhr.responseXML
-                    break
-                  case 'text':
-                    responseData = xhr.responseText
-                    break
-                  case 'json':
-                    responseData = JSON.parse(xhr.responseText)
-                }
-                resolve(responseData)
-                break
-              default:
-                reject(new Error('这里做错误处理'))
-            }
-          }
-        }
-        /* 向服务器发送请求 */
-        request(xhr, options)
-      })
+import axios from 'axios'
+import { Loading, Message } from 'element-ui'
+import qs from 'qs'
+// eslint-disable-next-line
+/* eslint-disable */
+// 响应时间
+axios.defaults.timeout = 30000
+// 配置cookie
+// axios.defaults.withCredentials = true
+// 配置请求头
+// axios.defaults.headers.post["Content-Type"] =
+//   "application/x-www-form-urlencodedcharset=UTF-8"
+//const baseURL = process.env.NODE_ENV === 'production' ? config.BASEURL : ''
+const baseURL = ''
+
+// 配置接口地址
+axios.defaults.baseURL = baseURL
+
+// 全局加载
+let loading
+function openLoading() {
+  loading = Loading.service({
+    lock: true,
+    text: '数据加载中',
+    spinner: 'el-icon-loading',
+    background: 'rgba(0,0,0,0.75)'
+  })
+}
+function closeLoading() {
+  loading.close()
+}
+function getCookie (name) {
+  let cname = name + '='
+  let cookies = document.cookie.split(' ')
+  for (let i = 0; i < cookies.length; i++) {
+    let tmpC = cookies[i]
+    if (tmpC === '') {
+      return ''
     }
-    Vue.prototype.$post = function (options) {
-      options.type = 'post'
-      return this.$http(options)
+    while (tmpC.charAt(0) === '') {
+      tmpC = tmpC.substring(1)
     }
-    Vue.prototype.$get = function (options) {
-      options.type = 'get'
-      return this.$http(options)
+    if (tmpC.indexOf(cname) !== -1) {
+      return tmpC.substring(cname.length, tmpC.length)
     }
   }
+  return ''
+}
+// POST传参序列化(添加请求拦截器)
+axios.interceptors.request.use(
+  config => {
+    if (config.method === "post") {
+      // 序列化
+      config.headers["Content-Type"] = "application/x-www-form-urlencoded"
+      // config.headers['Content-Type'] = 'application/json'
+      config.headers['withCredentials'] = true
+      config.headers['X-CSRFToken'] = getCookie('csrf_token')
+      config.data = qs.stringify(config.data) // ***** 这里转义
+    }
+
+    openLoading()
+    // if (store.state.token) {
+    //   config.headers["token-auth"] = store.state.token
+    // }
+    config.params = {
+      t: new Date().getTime(),
+      ...config.params
+    }
+    return config
+  },
+  err => {
+    // Message.error('错误的传参')
+    return Promise.reject(err)
+  }
+)
+// 返回状态判断(添加响应拦截器)
+axios.interceptors.response.use(
+  res => {
+    if (res.config.responseType == "blob") {
+      closeLoading()
+      return res
+    }
+    if (res.data.code === 0) {
+      closeLoading()
+      return res.data.data
+    } else {
+      closeLoading()
+      // Message({
+      //   message: res.data.msg,
+      //   type: "error",
+      //   showClose: true,
+      //   showCancelButton: false,
+      //   showConfirmButton: true,
+      //   closeOnClickModal: false,
+      //   closeOnPressEscape: false
+      // }).then(() => {})
+      Message.warning(res.data)
+      return
+    }
+  },
+  err => {
+    // if (config.ENV !== "prod") {
+    //   if (err.code == "ECONNABORTED" && err.message.indexOf("timeout") != -1)
+    //     return
+    //   Message({
+    //     message: err.message,
+    //     type: "error",
+    //     showClose: true,
+    //     showCancelButton: false,
+    //     showConfirmButton: true,
+    //     closeOnClickModal: false,
+    //     closeOnPressEscape: false
+    //   }).then(() => {})
+    // }
+    return Promise.reject(err.message)
+  }
+)
+// GET 请求方式
+export function get(url, params) {
+  return new Promise((resolve, reject) => {
+    axios
+      .get(url, {
+        params: params
+      })
+      .then(
+        data => {
+          resolve(data)
+        },
+        err => {
+          reject(err)
+        }
+      )
+      .catch(error => {
+        reject(error)
+      })
+  })
+}
+
+export function post(url, params) {
+  return new Promise((resolve, reject) => {
+    axios
+      .post(url, params)
+      .then(
+        data => {
+          resolve(data)
+        },
+        err => {
+          reject(err)
+        }
+      )
+      .catch(error => {
+        reject(error)
+      })
+  })
+}
+export function put(url, params) {
+  return new Promise((resolve, reject) => {
+    axios
+      .put(url, params)
+      .then(
+        data => {
+          resolve(data)
+        },
+        err => {
+          reject(err)
+        }
+      )
+      .catch(error => {
+        reject(error)
+      })
+  })
+}
+// delete 请求方式
+export function DELETE(url, params) {
+  return new Promise((resolve, reject) => {
+    axios
+      .delete(url, {
+        params: params
+      })
+      .then(
+        data => {
+          resolve(data)
+        },
+        err => {
+          reject(err)
+          alert(err.data.msg)
+        }
+      )
+      .catch(error => {
+        reject(error)
+        alert(error)
+      })
+  })
 }

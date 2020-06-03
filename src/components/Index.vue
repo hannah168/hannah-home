@@ -29,6 +29,7 @@
 </template>
 
 <script>
+/* eslint-disable */
 export default {
   name: 'index',
   data () {
@@ -46,18 +47,20 @@ export default {
   },
   methods: {
     wheatherData () {
-      this.$get({'url': '/api/weatherdetail'}).then(res => {
+      this.$api.weatherData()
+      .then(res => {
         this.writeCurrentDate()
         this.mes = res.weatherinfo
         let weather = this.mes.weather
         if (weather === '多云' | weather.indexOf('阴') !== -1) {
-          this.weathericon = 'el-icon-cloudy'
+            this.weathericon = 'el-icon-cloudy'
         } else if (weather.indexOf('雨') !== -1) {
-          this.weathericon = 'el-icon-light-rain'
+            this.weathericon = 'el-icon-light-rain'
         } else {
-          this.weathericon = 'el-icon-sunny'
+            this.weathericon = 'el-icon-sunny'
         }
-      }).catch(error => {
+      })
+      .catch(error => {
         alert(error)
       })
     },

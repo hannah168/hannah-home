@@ -16,8 +16,8 @@ export default {
   methods: {
     getAboutUs () {
       // axios.get('/api/aboutus').then(res => {
-      this.$get({'url': '/api/aboutus'}).then(res => {
-        this.msg = res.data
+      this.$api.aboutUs().then(res => {
+        this.msg = res
       })
     }
   },

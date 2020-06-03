@@ -34,7 +34,7 @@ export default {
   methods: {
     onSubMit () {
       // axios.post('/api/login', this.formMess, {'headers': {'X-CSRFToken': this.getCookie('csrf_token'), 'withCredentials': true}}).then(res => {
-      this.$post({'url': '/api/login', 'data': this.formMess}).then(res => {
+      this.$api.login(this.formMess).then(res => {
         this.$router.push('/product')
       }).catch(error => {
         alert(error)
