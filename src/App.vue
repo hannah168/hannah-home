@@ -14,7 +14,7 @@
       </div>
       <p class="copyright">
             CopyRight © 2020 上弦文化有限公司 All Rights Reserved<br />
-电话：532-88888888    鲁ICP备88888888号
+            电话：532-88888888    鲁ICP备88888888号
       </p>
     </div>
   </div>
